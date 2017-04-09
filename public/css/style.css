@@ -1,0 +1,12 @@
+html {
+    margin: 0px;
+    padding: 0px;
+}
+
+#main_menu li {
+    display: inline;
+    color: black;
+    background: gray;
+    padding: 5px;
+    margin: 5px;
+}

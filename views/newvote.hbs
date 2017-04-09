@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <Title>VoteFor : {{title}}</Title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,  user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css">
+    <script src="/js/jquery-3.2.0.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+    
+            jQuery('input[type=submit]').button();
+
+            jQuery('#tab').tabs();
+            {{#if titleno}}
+            jQuery('#votetitle').css({color: 'red'});
+            jQuery('#tab').tabs('disable', 1);
+            jQuery('#tab').tabs('disable', 2);
+            jQuery('#tab').tabs('disable', 3);
+            {{else}}
+            jQuery('#votetitle').css({color: 'green'});
+            {{/if}}
+
+jQuery('#newvoteform').validate({
+rules: {
+    votetitle: {
+        required: true,
+        minlength: 10
+    }
+},
+messages: {
+    votetitle: {
+        required: "Your Vote must have a Title",
+        minlength: "Vote title to short (10 chars min)"
+        }
+}
+});
+
+jQuery('#textform').validate({
+rules: {
+    texttext: {
+        required: true,
+        minlength: 5
+    }
+},
+messages: {
+    texttext: {
+        required: "Your Eleent must have a Text",
+        minlength: "Element Text to short (5 chars min)"
+        }
+}
+});
+
+jQuery('#checkform').validate({
+rules: {
+    checktext: {
+        required: true,
+        minlength: 4
+    },
+    checkvalue: {
+        required: true,
+        minlength: 2
+    }
+},
+messages: {
+    checktext: {
+        required: "You must give a checkBox Text",
+        minlength: "At least 4 charachters"
+    },
+    checkvalue: {
+        required: "Give a value for checkBox",
+        minlength: "At leaste 2 char long"
+    }
+}
+});
+
+jQuery('#selectform').validate({
+    rules: {
+        selecttext: {
+        required: true,
+        minlength: 5
+        },
+     selectvalue1: {
+         required: true,
+         minlength: 3
+     },
+     selectvalue2: {
+         required: true,
+         minlength: 3
+     },   
+     selectvalue3: {
+         minlength: 3
+     },
+     selectvalue4: {
+         minlength: 3
+     },
+     selectvalue5: {
+         minlength: 3
+     },
+     selectvalue6: {
+         minlength: 3
+     },
+     selectvalue7: {
+         minlength: 3
+     },
+     selectvalue8: {
+         minlength: 3
+     },
+     selectvalue9: {
+         minlength: 3
+     },
+     selectvalue10: {
+         minlength: 3
+     }
+    },
+    messages: {
+        selecttext: {
+        required: "You must give a Select Text",
+        minlength: "At least 5 charachters"
+        },
+        selectvalue1: {
+            required: "You must give First Value Text",
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue2: {
+            required: "You must give a Second Value Text",
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue3: {
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue4: {
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue5: {
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue6: {
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue7: {
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue8: {
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue9: {
+            minlength: "At least 3 Chars or blunk"
+        },
+        selectvalue10: {
+            minlength: "At least 3 Chars or blunk"
+        }
+    }
+});
+
+        });
+    </script>
+    </head>
+<body>
+    {{> header}}
+
+<h2 id="votetitle">Title : {{votepasstitle}}</h2>
+
+
+{{#if tomenyelements}}
+<h2 style="color: red;">Elements : {{voteelements}} - Too meny elements</h2>
+{{else}}
+<h3 style="color: green;">Elements : {{voteelements}}</h3>
+{{/if}}
+</h3>
+<div id="tab">
+<ul>
+<li><a href="#vote">Vote Options</a></li>    
+<li><a href="#text">Text Input</a></li>
+<li><a href="#select">Select Input</a></li>
+<li><a href="#checkbox">Check Box</a></li>
+</ul>
+<div id="vote">
+<form id="newvoteform" action="newvote" method="post">
+    <label for="votetitle">Vote Title</label>
+    <input type="text" name="votetitle" size="20"
+    {{#if votepasstitle}}
+    value="{{votepasstitle}}"
+    {{else}}
+    placeholder="Type the title"
+    {{/if}} 
+    autofocus><br><br>
+    <label for="voteshort">Vote ID</label>
+    <input type="text" name="votesht" value="{{voteshort}}" disabled><br><br>
+    <input type="hidden" name="voteshort" value="{{voteshort}}">
+    <input type="hidden" name="textvoteelements" value="{{voteelements}}">
+    <input type="submit" name="Save" value="saveTitle">
+</form>
+</div>
+
+<div id="text">
+<form action="newvote" id="textform" method="post">
+<label for="texttext">Text : </label>
+<input type="text" name="texttext" placeholder="The text of the field" autofocus><br><br>
+<label for="textvalue">Default Value :</label>
+<input type="text" name="textvalue" placeholder="Default Value (if any)"><br><br>
+<input type="hidden" name="textshortid" value="{{voteshort}}">
+<input type="hidden" name="textvoteid" value="{{votepassid}}">
+<input type="hidden" name="textvotetitle" value="{{votepasstitle}}">
+<input type="hidden" name="textvoteelements" value="{{voteelements}}">
+<input type="submit" name="Save" value="saveText">
+</form>
+</div>
+<div id="select">
+<form action="newvote" id="selectform" method="post">
+    <label for="selecttext">Select Text : </label>
+<input type="text" name="selecttext" placeholder="Select Text" autofocus><br><br>
+<label for="selectvalue1">Select Value 1 : </label>
+<input type="text" name="selectvalue1" placeholder="Value 1"><br>
+<label for="selectvalue2">Select Value 2 : </label>
+<input type="text" name="selectvalue2" placeholder="Value 2"><br>
+<label for="selectvalue3">Select Value 3 : </label>
+<input type="text" name="selectvalue3" placeholder="Value 3"><br>
+<label for="selectvalue4">Select Value 4 : </label>
+<input type="text" name="selectvalue4" placeholder="Value 4"><br>
+<label for="selectvalue5">Select Value 5 : </label>
+<input type="text" name="selectvalue5" placeholder="Value 5"><br>
+<label for="selectvalue6">Select Value 6 : </label>
+<input type="text" name="selectvalue6" placeholder="Value 6"><br>
+<label for="selectvalue7">Select Value 7 : </label>
+<input type="text" name="selectvalue7" placeholder="Value 7"><br>
+<label for="selectvalue8">Select Value 8 : </label>
+<input type="text" name="selectvalue8" placeholder="Value 8"><br>
+<label for="selectvalue9">Select Value 9 : </label>
+<input type="text" name="selectvalue9" placeholder="Value 9"><br>
+<label for="selectvalue10">Select Value 10 : </label>
+<input type="text" name="selectvalue10" placeholder="Value 10"><br><br>
+<input type="hidden" name="textshortid" value="{{voteshort}}">
+<input type="hidden" name="textvoteid" value="{{votepassid}}">
+<input type="hidden" name="textvotetitle" value="{{votepasstitle}}">
+<input type="hidden" name="textvoteelements" value="{{voteelements}}">
+<input type="submit" name="Save" value="saveSelect">
+</form>
+</div>
+<div id="checkbox">
+<form action="newvote" id="checkform" method="post">
+<label for="checktext">CheckBox Text : </label>
+<input type="text" name="checktext" placeholder="Text for CheckBox" autofocus><br><br>
+<label for="checkvalue">CheckBox Value : </label>
+<input type="text" name="checkvalue" placeholder="The returned value"><br><br>
+<input type="hidden" name="textshortid" value="{{voteshort}}">
+<input type="hidden" name="textvoteid" value="{{votepassid}}">
+<input type="hidden" name="textvotetitle" value="{{votepasstitle}}">
+<input type="hidden" name="textvoteelements" value="{{voteelements}}">
+<input type="submit" name="Save" value="saveCheck">
+</form>
+</div>
+</div>
+    {{> footer}}
+</body>
+</html>

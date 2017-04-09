@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <Title>VoteFor : {{title}}</Title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,  user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css">
+    <script src="/js/jquery-3.2.0.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+
+            jQuery('#finduser').click(function() {
+                if(jQuery('#usermail').val().length > 0){
+                    jQuery('#ajaxdiv').text('');
+                 jQuery.post('/votes/ajaxuser', {email: jQuery('#usermail').val()}, function(result) {
+                    if(result.error){
+                    jQuery('#ajaxdiv').text(result.error);    
+                    } else {
+                        for(var i = 0; i<result.length;i++){
+                            jQuery('#selectuservote').append($('<option>', {value: result[i]._id, text: result[i].title}));
+                        };
+                         jQuery('#selectuservote').removeAttr('disabled');
+                         jQuery('#selectvote').button('enable');
+                    };
+                 });
+                } else {
+                    jQuery('#ajaxdiv').text('Give user e-mail'); 
+                }
+            });
+
+            jQuery('#tab').tabs();
+            jQuery('input[type=submit]').button();
+            jQuery('button').button();
+
+
+        });
+    </script>
+    </head>
+<body>
+    {{> header}}
+
+{{#if message}}
+<h2>{{message}}</h2>
+{{/if}}
+<div id="tab">
+<ul>
+<li><a href="#byshortid">Find Vote By ShortId</a></li>
+<li><a href="#byemail">Find Vote by User e-mail</a></li>
+</ul>
+<div id="byshortid">
+<form action="/votes" method="post">
+<label for="voteshortid">Type vote short id</label>
+<input type="text" name="voteshortid" placeholder="short id" autofocus><br><br>
+<input type="submit" name="Find" value="Findvote">
+</form>
+</div>
+<div id="byemail">
+<label for="usermail">User e-mail : </label>
+<input type="text" name="usermail" id="usermail"><br>
+<div id="ajaxdiv"></div><br>
+<button id="finduser">Find User Votes</button><br><br>
+<form action="/votes" method="post">
+<label for="uservote">Select user Vote : </label>
+<select name="selectuservote" id="selectuservote" disabled="disabled" style="width: 250px !important; min-width: 250px; max-width: 250px;">
+</select><br><br>
+<input type="submit" id="selectvote" name="SelectVote" value="SelectVote" disabled>
+</form>
+</div>
+</div>
+      {{> footer}}
+</body>
+</html>

@@ -1,0 +1,28 @@
+<header>
+<p>{{title}} 
+    {{#if username}}
+    : {{username}}
+    {{/if}}
+</p>
+</header>
+<nav>
+    <ul id="main_menu">
+        {{#if show_menu}}
+        {{#if user_menu}}
+        <li><a href="newvote">New Vote</a></li>
+        <li>View Votes</li>
+        <li>Results</li>
+        <li><a href="logout">LogOut</a></li>
+        {{else}}
+        <li><a href="about.html">About</a></li>
+        <li><a href="signin">SingIn</a></li>
+        <li><a href="login">LogIn</a></li>
+        <li><a href="/votes">Select Vote Form</a></li>
+        {{/if}}
+        {{/if}}
+        {{#if newvotemenu}}
+        <li><a href="userpanel">UserPanel</a></li>
+        {{/if}}
+
+    </ul>
+</nav>
