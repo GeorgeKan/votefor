@@ -13,7 +13,8 @@ var votes_route = express.Router();
 votes_route.get('/', (req, res) => {
 res.render('finduservote', {
     title: 'Select User Vote',
-    show_menu: false
+    show_menu: false,
+    dovotemenu: true
 });
 });
 

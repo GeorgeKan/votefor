@@ -213,7 +213,7 @@ if(req.body.Save === 'saveCheck'){
     var newElement = new Element({
         type: 'checkbox',
         text: req.body.checktext,
-        value: req.body.checkvalue,
+        value: 'yes',
         elemnum: countElements,
         voteform: req.body.textvoteid
     });

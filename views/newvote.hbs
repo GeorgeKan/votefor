@@ -59,20 +59,12 @@ rules: {
     checktext: {
         required: true,
         minlength: 4
-    },
-    checkvalue: {
-        required: true,
-        minlength: 2
     }
 },
 messages: {
     checktext: {
         required: "You must give a checkBox Text",
         minlength: "At least 4 charachters"
-    },
-    checkvalue: {
-        required: "Give a value for checkBox",
-        minlength: "At leaste 2 char long"
     }
 }
 });
@@ -244,8 +236,6 @@ jQuery('#selectform').validate({
 <form action="newvote" id="checkform" method="post">
 <label for="checktext">CheckBox Text : </label>
 <input type="text" name="checktext" placeholder="Text for CheckBox" autofocus><br><br>
-<label for="checkvalue">CheckBox Value : </label>
-<input type="text" name="checkvalue" placeholder="The returned value"><br><br>
 <input type="hidden" name="textshortid" value="{{voteshort}}">
 <input type="hidden" name="textvoteid" value="{{votepassid}}">
 <input type="hidden" name="textvotetitle" value="{{votepasstitle}}">
