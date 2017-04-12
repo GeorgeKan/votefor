@@ -181,6 +181,7 @@ if(req.body.Save === 'saveText'){
         type: 'text',
         text: req.body.texttext,
         value: req.body.textvalue,
+        values: [],
         elemnum: countElements,
         voteform: req.body.textvoteid
     });
@@ -214,6 +215,7 @@ if(req.body.Save === 'saveCheck'){
         type: 'checkbox',
         text: req.body.checktext,
         value: 'yes',
+        values: [],
         elemnum: countElements,
         voteform: req.body.textvoteid
     });
@@ -257,8 +259,37 @@ if(req.body.Save === 'saveSelect'){
         elemnum: countElements,
         voteform: req.body.textvoteid
     });
-    
-    return newElement.save().then((element) => {
+
+        newElement.values.push(req.body.selectvalue1);
+        newElement.values.push(req.body.selectvalue2);
+
+        if(!req.body.selectvalue3==""){
+        newElement.values.push(req.body.selectvalue3);
+         };
+         if(!req.body.selectvalue4==""){
+        newElement.values.push(req.body.selectvalue4);
+         };
+         if(!req.body.selectvalue5==""){
+        newElement.values.push(req.body.selectvalue5);
+         };
+         if(!req.body.selectvalue6==""){
+        newElement.values.push(req.body.selectvalue6);
+         };
+         if(!req.body.selectvalue7==""){
+        newElement.values.push(req.body.selectvalue7);
+         };
+         if(!req.body.selectvalue8==""){
+        newElement.values.push(req.body.selectvalue8);
+         };
+         if(!req.body.selectvalue9==""){
+        newElement.values.push(req.body.selectvalue9);
+         };
+         if(!req.body.selectvalue10==""){
+        newElement.values.push(req.body.selectvalue10);
+         };
+
+
+        newElement.save().then((element) => {
                 
         if(!req.body.selectvalue1==""){
         saveSelectResutls(element._id, req.body.selectvalue1);

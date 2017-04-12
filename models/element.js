@@ -12,6 +12,10 @@ value: {
     type: String,
     trim: true
 },
+values: [{
+    type : String,
+    trim: true
+}],
 elemnum: {
     type: Number,
 },

@@ -29,9 +29,16 @@ if(!uservote){
     message: 'Vote not found'
 });
 } else {
-    res.send(`Vote title: ${uservote.title}`);
+   return Element.find({voteform: uservote._id}).sort({elemnum: 1});
 };
-}, (err) => {
+}).then((elements) => {
+    res.render('dovote', {
+    title: 'Do the Vote',
+    show_menu: false,
+    elements: elements
+});
+
+}).catch((err) => {
     res.redirect('/votes');
 });
 };
@@ -39,11 +46,18 @@ if(!uservote){
 if(req.body.SelectVote === 'SelectVote'){
 Vote.findOne({_id: req.body.selectuservote}).then((uservote) => {
     if(uservote){
-    res.send(uservote.title);
+    return Element.find({voteform: uservote._id}).sort({elemnum: 1});
     } else {
         res.redirect('/votes');
     }
-}, (err) => {
+}).then((elements) => {
+    res.render('dovote', {
+    title: 'Do the Vote',
+    show_menu: false,
+    elements: elements
+});
+
+}).catch((err) => {
     res.redirect('/votes');
 });
 };

@@ -32,19 +32,15 @@ if(elem.type === 'checkbox'){
 
 if(elem.type === 'select'){
     
-    selectResults.find({forelementid: elem._id}).then((selects) => {
         var selectTag = elem.text + " : <select name='" + elem._id + "'>";
-        _.forEach(selects, (value) => {
-            selectTag = selectTag + "<option value='" + value.selectvalue + "'>" + value.selectvalue + "</option>"
+        _.forEach(elem.values, (value) => {
+            selectTag = selectTag + "<option value='" + value + "'>" + value + "</option>"
         });
         selectTag = selectTag + "</select>";
-        return 'Select';
-    }).catch((err) => {
-        return 'error';
-    });
 
+   
 };
-
+return new hbs.SafeString(selectTag);
 });
 
 
