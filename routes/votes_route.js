@@ -1,10 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const _ = require('lodash');
 
 var {User} = require('./../models/user');
 var {Vote} = require('./../models/vote');
 var {Element} = require('./../models/element');
+var {textResults} = require('./../models/textResults');
+var {checkResults} = require('./../models/checkResults');
+var {selectResults} = require('./../models/selectResults');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 var votes_route = express.Router();
@@ -26,6 +29,7 @@ if(!uservote){
     res.render('finduservote', {
     title: 'Select User Vote',
     show_menu: false,
+    dovotemenu: true,
     message: 'Vote not found'
 });
 } else {
@@ -35,7 +39,8 @@ if(!uservote){
     res.render('dovote', {
     title: 'Do the Vote',
     show_menu: false,
-    elements: elements
+    elements: elements,
+    voteid: elements[0].voteform
 });
 
 }).catch((err) => {
@@ -54,7 +59,8 @@ Vote.findOne({_id: req.body.selectuservote}).then((uservote) => {
     res.render('dovote', {
     title: 'Do the Vote',
     show_menu: false,
-    elements: elements
+    elements: elements,
+    voteid: elements[0].voteform
 });
 
 }).catch((err) => {
@@ -84,7 +90,7 @@ votes_route.post('/ajaxuser', (req, res) => {
 votes_route.get('/:voteshort', (req, res) => {
 
 Vote.findOne({shortid: req.params.voteshort}).then((uservote) => {
-    
+
     if(uservote){
     return Element.find({voteform: uservote._id}).sort({elemnum: 1});
     } else {
@@ -95,7 +101,8 @@ Vote.findOne({shortid: req.params.voteshort}).then((uservote) => {
     res.render('dovote', {
     title: 'Do the Vote',
     show_menu: false,
-    elements: elements
+    elements: elements,
+    voteid: elements[0].voteform
 });
 
 }).catch((err) => {
@@ -104,10 +111,53 @@ Vote.findOne({shortid: req.params.voteshort}).then((uservote) => {
 });
 
 votes_route.post('/dovote', (req, res) => {
-    res.send(req.body);
+    
+    Element.find({voteform: req.body.voteid}).then((elements) => {
+
+        _.forEach(elements, (elem) => {
+            if(elem.type==='text'){
+                var newtext = new textResults({
+                    forelementid: elem._id,
+                    value: req.body[elem._id]
+                });
+
+                newtext.save((err) => {
+                    if(err) {res.redirect('/votes')};
+                });
+            };
+
+            if(elem.type==='checkbox'){
+                if(req.body[elem._id]){
+                    
+                    checkResults.update({forelementid: elem._id}, {$inc: {checkyes: 1}}, (err, results) => {
+                         if(err) {res.redirect('/votes')};
+                    });
+                } else {
+                    checkResults.update({forelementid: elem._id}, {$inc: {checkno: 1}}, (err, results) => {
+                         if(err) {res.redirect('/votes')};
+                    });
+                };
+            };
+
+            if(elem.type==='select'){
+
+                selectResults.update({forelementid: elem._id, selectvalue: req.body[elem._id]}, {$inc: {selectsum: 1}}, (err, result) => {
+                    if(err) {res.redirect('/votes')};
+                });
+            }
+
+    });
+    }).catch((err) => {
+        res.redirect('/votes');
+    });
+
+     res.render('finduservote', {
+    title: 'Select User Vote',
+    show_menu: false,
+    dovotemenu: true,
+    message: 'Your Vote Saved - Select new Vote'
 });
 
-
-
+});
 
 module.exports = {votes_route};
