@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <Title>VoteFor : {{title}}</Title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,  user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css">
+    <script src="/js/jquery-3.2.0.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+
+            jQuery('#resultselect').on("selectmenuchange", function( event, ui ) {                    
+                var voteid = jQuery(this).val();
+
+                jQuery.post('/ajaxvote', {voteid, type: 'text' }, function(textvalues) {                        
+                    textvalues.textelems.forEach(function(textfields){
+                            var txtdiv = '<p><strong>' + textfields.text + '</strong><br>';
+                        jQuery.post('/ajaxvote', {textid: textfields._id, type: 'textresult' }, function(textfinal) {
+                            textfinal.txtvalues.forEach(function(finaltxtvals) {
+                                txtdiv = txtdiv + finaltxtvals.value + '<br>';
+                            });
+                            txtdiv + txtdiv + '</p>';
+                   jQuery('#textresult').append(txtdiv);
+                        });
+                   });
+                });
+            
+            jQuery.post('/ajaxvote', {voteid, type: 'checkbox' }, function(checkvalues) {
+                checkvalues.checkelems.forEach(function(checkfields) {
+                    var chkdiv = '<p><strong>' + checkfields.text + '</strong><br>';
+                    jQuery.post('/ajaxvote', {checkid: checkfields._id, type: 'checkresult' }, function(checkfinal) {
+                        chkdiv = chkdiv + '<strong>Yes : </strong>' + checkfinal.chkvalues.checkyes;
+                        chkdiv = chkdiv + '<strong>    No : </strong>' + checkfinal.chkvalues.checkno;
+                        chkdiv = chkdiv + '</p>';
+                    jQuery('#checkresult').append(chkdiv);
+                    });
+                });
+            });
+            
+             jQuery.post('/ajaxvote', {voteid, type: 'select' }, function(selectvalues) {
+                selectvalues.selectelems.forEach(function(selectfields) {
+                    var seldiv = '<p><strong>' + selectfields.text + '</strong><br>';
+                jQuery.post('/ajaxvote', {selectid: selectfields._id, type: 'selectresult' }, function(selectfinal) {
+
+                     selectfinal.slcvalues.forEach(function(finalslcvals) {
+                                seldiv = seldiv + '<strong>' + finalslcvals.selectvalue + ' : </strong>';
+                                seldiv = seldiv + finalslcvals.selectsum + '<br>';
+                            });
+                            seldiv + seldiv + '</p>';
+                   jQuery('#selectresult').append(seldiv);
+                });    
+                });
+             });
+            
+            });
+
+        jQuery('#accordion').accordion({
+  heightStyle: "content"
+});        
+        jQuery('#resultselect').selectmenu({ style: "dropdown", width:140 });        
+        });
+
+    </script>
+</head>
+<body>
+    {{> header}}
+
+Select Vote for Results : {{selectresult selectvotes}}
+
+<div id="accordion">
+<h3>Text Elements</h3>
+  <div>
+    <p id="textresult">
+    </p>
+  </div>
+  <h3>Select Elements</h3>
+  <div>
+    <p id="selectresult">
+    </p>
+  </div>
+  <h3>CheckBox elements</h3>
+  <div>
+    <p id="checkresult">
+    </p>
+  </div>
+
+</div>
+
+    {{> footer}}
+</body>
+</html>

@@ -19,30 +19,31 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 
-hbs.registerHelper('createelement', (elem) => {
+hbs.registerHelper('selectresult', (elem) => {
+var selectTag = "<select name='resultselect' id='resultselect'>";
+        _.forEach(elem, (value) => {
+            selectTag = selectTag + "<option value='" + value._id + "'>" + value.title + "</option>"
+        });
+        selectTag = selectTag + "</select>";
+    return new hbs.SafeString(selectTag);        
+});
 
+hbs.registerHelper('createelement', (elem) => {
 if(elem.type === 'text'){
     return new hbs.SafeString("<p>" + elem.text + " : <input type='text' name='" + elem._id + "' placeholder='" + elem.value + "'></p>");
 };
-
-
 if(elem.type === 'checkbox'){
     return new hbs.SafeString("<p>" + elem.text + " : <input type='checkbox' name='" + elem._id + "' value='" + elem.value + "'></p>");
 }
-
 if(elem.type === 'select'){
-    
         var selectTag = elem.text + " : <select name='" + elem._id + "'>";
         _.forEach(elem.values, (value) => {
             selectTag = selectTag + "<option value='" + value + "'>" + value + "</option>"
         });
-        selectTag = selectTag + "</select>";
-
-   
+        selectTag = selectTag + "</select>";   
 };
 return new hbs.SafeString(selectTag);
 });
-
 
 app.get('/', (req, res) => {
     req.session.destroy();

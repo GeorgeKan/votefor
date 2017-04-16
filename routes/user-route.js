@@ -1,13 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const _ = require('lodash');
 
 var randomString = require('crypto-random-string');
 var md5 = require('md5');
 var {User} = require('./../models/user');
 var {Vote} = require('./../models/vote');
 var {Element} = require('./../models/element');
+var {textResults} = require('./../models/textResults');
 var {checkResults} =require('./../models/checkResults');
+var {selectResults} = require('./../models/selectResults');
 var {saveSelectResutls} = require('./utils/saveSelectResutls');
 var {authenticate} = require('./../middleware/authenticate');
 app.use(bodyParser.json());
@@ -97,7 +100,7 @@ res.render('userpanel', {
             title: 'User panel',
             username: req.user.username,
             show_menu: true,
-            user_menu: true,
+            user_menu: true
         });
 });
 
@@ -337,7 +340,84 @@ if(req.body.Save === 'saveSelect'){
         res.redirect('/logout');
     });
 }
+});
 
+app.post('/ajaxvote', (req, res) => {
+    
+    if(req.body.type==='text'){
+        Element.find({voteform: req.body.voteid, type: 'text'},'_id text').then((textelems) => {
+            res.json({
+                textelems
+            });
+        }).catch((err) => {
+            res.json({error: 'error'});
+        });
+    };
+
+    if(req.body.type==='textresult'){
+        textResults.find({forelementid: req.body.textid}).then((txtvalues) => {
+            res.json({
+                txtvalues
+            });
+        }).catch((err) => {
+            res.json({error: 'error'});
+        });
+    };
+
+ if(req.body.type==='checkbox'){
+        Element.find({voteform: req.body.voteid, type: 'checkbox'},'_id text').then((checkelems) => {
+            res.json({
+                checkelems
+            });
+        }).catch((err) => {
+            res.json({error: 'error'});
+        });
+    };
+
+ if(req.body.type==='checkresult'){
+        checkResults.findOne({forelementid: req.body.checkid}).then((chkvalues) => {
+            res.json({
+                chkvalues
+            });
+        }).catch((err) => {
+            res.json({error: 'error'});
+        });
+    };
+
+if(req.body.type==='select'){
+        Element.find({voteform: req.body.voteid, type: 'select'},'_id text').then((selectelems) => {
+            res.json({
+                selectelems
+            });
+        }).catch((err) => {
+            res.json({error: 'error'});
+        });
+    };
+
+ if(req.body.type==='selectresult'){
+        selectResults.find({forelementid: req.body.selectid}).then((slcvalues) => {
+            res.json({
+                slcvalues
+            });
+        }).catch((err) => {
+            res.json({error: 'error'});
+        });
+    };
+
+});
+
+app.get('/results', authenticate, (req, res) => {
+Vote.find({userid: req.user._id}).then((votes) => {
+res.render('results', {
+    title: 'Vote Results',
+    username: req.user.username,
+            show_menu: true,
+            user_menu: true,
+            selectvotes: votes
+});
+}).catch((err) => {
+res.redirect('/logout');
+});
 });
 
 module.exports = {user_router};

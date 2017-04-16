@@ -13,6 +13,10 @@
         jQuery(document).ready(function() {
 
             jQuery('#finduser').click(function() {
+                
+                jQuery('#selectvote').button('disable')
+                jQuery('#selectuservote option').remove().attr('disabled', true);
+
                 if(jQuery('#usermail').val().length > 0){
                     jQuery('#ajaxdiv').text('');
                  jQuery.post('/votes/ajaxuser', {email: jQuery('#usermail').val()}, function(result) {
