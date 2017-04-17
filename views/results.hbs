@@ -13,7 +13,21 @@
         jQuery(document).ready(function() {
 
             jQuery('#resultselect').on("selectmenuchange", function( event, ui ) {                    
+                jQuery('#votestats').html('');
+                jQuery('#textresult').find('p').remove();
+                jQuery('#selectresult').find('p').remove();
+                jQuery('#checkresult').find('p').remove();
                 var voteid = jQuery(this).val();
+
+                jQuery.post('/ajaxvote', {voteid, type: 'stats' }, function(statvalues) {
+
+                    var statdiv = 'Vote Title : ' + statvalues.stats.title + '<br><br>';
+                    statdiv = statdiv + 'Vote ShortId : ' + statvalues.stats.shortid + '<br>';
+                    statdiv = statdiv + 'Vote Url : http://domain:3000/votes/' + statvalues.stats.shortid + '<br><br>';
+                    statdiv = statdiv + 'Vote Do Num : ' + statvalues.stats.dovotesum + '<br>';
+                    jQuery('#votestats').html(statdiv);
+
+                });
 
                 jQuery.post('/ajaxvote', {voteid, type: 'text' }, function(textvalues) {                        
                     textvalues.textelems.forEach(function(textfields){
@@ -69,8 +83,12 @@
     {{> header}}
 
 Select Vote for Results : {{selectresult selectvotes}}
-
 <div id="accordion">
+<h3>Vote Statistics</h3>
+  <div>
+    <p id="votestats">
+    </p>
+  </div>
 <h3>Text Elements</h3>
   <div>
     <p id="textresult">

@@ -148,7 +148,8 @@ if(req.body.Save === 'saveTitle'){
             var newVote = new Vote({
                 userid: req.user._id,
                 title: req.body.votetitle,
-                shortid : req.body.voteshort
+                shortid : req.body.voteshort,
+                dovotesum: 0
             });
             newVote.save().then((newvote) => {
                 res.render('newvote', {
@@ -291,7 +292,6 @@ if(req.body.Save === 'saveSelect'){
         newElement.values.push(req.body.selectvalue10);
          };
 
-
         newElement.save().then((element) => {
                 
         if(!req.body.selectvalue1==""){
@@ -344,6 +344,16 @@ if(req.body.Save === 'saveSelect'){
 
 app.post('/ajaxvote', (req, res) => {
     
+    if(req.body.type==='stats'){
+        Vote.findOne({_id: req.body.voteid}).then((stats) => {
+            res.json({
+                stats
+            });
+        }).catch((err) => {
+            res.json({error: 'errorrrrrrrr'});
+        });
+    };
+
     if(req.body.type==='text'){
         Element.find({voteform: req.body.voteid, type: 'text'},'_id text').then((textelems) => {
             res.json({

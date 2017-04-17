@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false}));
 
 hbs.registerHelper('selectresult', (elem) => {
 var selectTag = "<select name='resultselect' id='resultselect'>";
+selectTag = selectTag + "<option value='1'>--Select Vote Title--</option>";
         _.forEach(elem, (value) => {
             selectTag = selectTag + "<option value='" + value._id + "'>" + value.title + "</option>"
         });

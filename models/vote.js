@@ -17,8 +17,12 @@ var voteSchema = mongoose.Schema({
     shortid: {
         type: String,
         required: true
-    }
+    },
 
+    dovotesum: {
+        type: Number
+    }
+    
 });
 
 var Vote = mongoose.model('Vote', voteSchema);

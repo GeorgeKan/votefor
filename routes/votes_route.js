@@ -21,7 +21,6 @@ res.render('finduservote', {
 });
 });
 
-
 votes_route.post('/', (req, res) => {
 if(req.body.Find === 'Findvote') {
 Vote.findOne({shortid: req.body.voteshortid}).then((uservote) => {
@@ -88,23 +87,19 @@ votes_route.post('/ajaxuser', (req, res) => {
 });
 
 votes_route.get('/:voteshort', (req, res) => {
-
 Vote.findOne({shortid: req.params.voteshort}).then((uservote) => {
-
     if(uservote){
     return Element.find({voteform: uservote._id}).sort({elemnum: 1});
     } else {
         res.redirect('/votes');
     }
 }).then((elements) => {
-
     res.render('dovote', {
     title: 'Do the Vote',
     show_menu: false,
     elements: elements,
     voteid: elements[0].voteform
 });
-
 }).catch((err) => {
     res.redirect('/votes');
 });
@@ -112,6 +107,10 @@ Vote.findOne({shortid: req.params.voteshort}).then((uservote) => {
 
 votes_route.post('/dovote', (req, res) => {
     
+    Vote.update({_id: req.body.voteid}, {$inc: {dovotesum: 1}}, (err, results) => {
+        if(err) {res.redirect('/votes')};
+    });
+
     Element.find({voteform: req.body.voteid}).then((elements) => {
 
         _.forEach(elements, (elem) => {
