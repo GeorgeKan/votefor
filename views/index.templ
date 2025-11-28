@@ -1,0 +1,56 @@
+package views
+
+templ Index(title string, login bool) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content2="width=device-width, initial-scale=1.0"/>
+			 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+			 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
+      <title>{ title } Page</title>
+		</head>
+		<body>
+			<div class="container">
+				@Header(login)
+				{ children... }
+			</div>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+		</body>
+	</html>
+}
+
+
+templ Header(login bool) {
+<div class="container">
+      <nav class="navbar navbar-expand-md px-3" style="background-color: #F2F0F0;">  
+        <a href="/" class="navbar-brand">
+          <span class="fw-bold text secondary">VoteFor</span>
+        </a>
+        <div class="collapse navbar-collapse d-flex justify-content-end">
+          <ul class="navbar-nav">
+            <li class="nav-item active mx-3">
+              <a href="/" class="nav-link active">Home</a>
+            </li>
+
+if login {  
+            <li class="nav-item mx-3">
+              <a href="/cp" class="nav-link">Control Panel</a>
+            </li>        
+            <li class="nav-item mx-3">
+              <a href="/auth/logout" class="nav-link">Logout</a>
+            </li>
+} else {
+    <li class="nav-item mx-3">
+              <a href="/auth/login" class="nav-link">Login</a>
+            </li>
+            <li class="nav-item ms-3 me-1">
+              <a href="/auth/register" class="nav-link">Register</a>
+            </li>
+}  
+          </ul>
+        </div>
+    </nav>
+      </div>
+}
