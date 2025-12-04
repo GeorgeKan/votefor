@@ -16,7 +16,7 @@ func RegisterUser(user models.User) bool {
 
 func FindUserByEmail(email string) bool {
 	var user models.User
-	res := Db.Where("email == ?", email).First(&user)
+	res := Db.Where("email = ?", email).First(&user)
 	return !errors.Is(res.Error, gorm.ErrRecordNotFound)
 }
 
@@ -26,7 +26,7 @@ func UpdateUuidCookie(user models.User, token string) {
 
 func CheckLoginUser(email, password string) (models.User, bool) {
 	var user models.User
-	res := Db.Where("email == ?", email).First(&user)
+	res := Db.Where("email = ?", email).First(&user)
 	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return models.User{}, false
 	} else {
@@ -40,6 +40,6 @@ func CheckLoginUser(email, password string) (models.User, bool) {
 
 func FindUserByToken(token string) bool {
 	var user models.User
-	res := Db.Where("uuid == ?", token).First(&user)
+	res := Db.Where("uuid = ?", token).First(&user)
 	return !errors.Is(res.Error, gorm.ErrRecordNotFound)
 }
